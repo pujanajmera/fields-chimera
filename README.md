@@ -9,7 +9,8 @@ fields-chimera.py
 
 The primary operating script is ```fields-chimera.py```, which will generate a ```.py``` chimera session file. The following options are available:
 ```
--i : Input vector field file
+-v : Input vector field file
+-p : Input protein PDB file
 -o : Output file name (will end in .py by default, so don't include an extension)
 -ch : Output file type (either 'chimera' or 'chimerax'); Default: chimerax
 ```
