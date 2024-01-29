@@ -1,5 +1,5 @@
 # fields-chimera
-This repository hosts code for visualizing 1,2, or 3 dimensional vector fields in the Chimera biomolecular software suite
+This repository hosts code for visualizing 3 dimensional vector fields in the Chimera biomolecular software suite
 
 Upon installation with ```pip install .```, the following scripts will be available to use:
 
