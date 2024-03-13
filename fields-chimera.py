@@ -75,7 +75,8 @@ def check_field(field_array, sample_density_array):
         None
     '''
     print(sample_density_array)
-    if field_array.shape[0] != np.product(np.concatenate([(2*sample_density_array+1)[0:2],np.expand_dims(2*sample_density_array[2], axis=0)])):
+    print(field_array.shape)
+    if field_array.shape[0] != np.product(np.concatenate([(2*sample_density_array+1)[0:2],np.expand_dims(2*sample_density_array[2]+1, axis=0)])):
         raise ValueError(f"Field provided does not match sample density, field of shape {field_array.shape[0]} does not match expected sample amount of {np.product(np.concatenate([(2*sample_density_array+1)[0:2],np.expand_dims(sample_density_array[2], axis=0)]))}")
     else:
         print("Field matches sample density, check passed, continuing...")
@@ -128,7 +129,8 @@ def generate_bild_file(tip_to_tail_vectors,
                        transformed_field_array, 
                        chimera_type, 
                        percentile, 
-                       sparsify_factor):
+                       sparsify_factor
+                       output):
     '''
     This function generates the BILD file for the 3D vector field
     Inputs:
@@ -151,7 +153,7 @@ def generate_bild_file(tip_to_tail_vectors,
     b = (np.ones((field_mags.shape[0], 1))).astype(int)[::sparsify_factor]
     field_mags = field_mags[::sparsify_factor]
     tip_to_tail_vectors = tip_to_tail_vectors[::sparsify_factor]
-    with open('output.bild', 'w') as bild:
+    with open(f'{output}.bild', 'w') as bild:
         bild.write(".transparency 0.25\n")
         for i in range(tip_to_tail_vectors.shape[0]):
             if field_mags[i] > percentile_cutoff:
@@ -163,7 +165,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process field data')
     parser.add_argument('-v', metavar='field_file_path', type=str, help="Input vector field file")
     parser.add_argument('-p', metavar='protein_file_path', type=str, help="Input protein PDB file")
-    parser.add_argument('-o', metavar='output_file_name', type=str, help="Output file name (will end in .py by default, so don't include an extension)", default='output')
+    parser.add_argument('-o', metavar='output_file_name', type=str, help="Output file name (will end in .bild by default, so don't include an extension)", default='output')
     parser.add_argument('-ch', metavar='chimera_type', type=str, help="Output file type (either 'chimera' or 'chimerax'); Default: chimerax", default='chimerax')
     parser.add_argument('-c', metavar='percentile', type=int, help="Top Nth percentile for sparsifying the field; Default: 0", default=0)
     parser.add_argument('-s', metavar='sparsify_factor', type=int, help="Sparsification factor for the field (can be used in tandem with percentile_cutoff); Default: 1", default=1)
@@ -178,6 +180,6 @@ def main():
     
     tip_to_tail_vectors = generate_tip_tail_vectors(transformed_field_array.copy(), sample_density_array, volume_box_array)
 
-    generate_bild_file(tip_to_tail_vectors, transformed_field_array, args.ch, args.c, args.s)
+    generate_bild_file(tip_to_tail_vectors, transformed_field_array, args.ch, args.c, args.s, args.o)
 
 main()
