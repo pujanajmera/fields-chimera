@@ -129,7 +129,7 @@ def generate_bild_file(tip_to_tail_vectors,
                        transformed_field_array, 
                        chimera_type, 
                        percentile, 
-                       sparsify_factor
+                       sparsify_factor,
                        output):
     '''
     This function generates the BILD file for the 3D vector field
